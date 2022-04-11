@@ -1,0 +1,27 @@
+﻿@page "/register"
+@inject Viewmodels.Registration RegVM
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm>
+                    <MudTextField T="string" Label="email" @bind-Value="RegVM.User.Email"/>
+                    <MudTextField T="string" Label="username" @bind-Value="RegVM.User.UserName"/>
+                    <MudTextField T="string" Label="Password" @bind-Value="RegVM.User.Password" HelperText="Choose a strong password"/>
+                    <div class="d-flex">
+                        <MudRadioGroup T="bool" @bind-SelectedOption=RegVM.User.IsAdmin>
+                            <MudRadio Option="false" >User</MudRadio>
+                            <MudRadio Option="true">Admin</MudRadio>
+                        </MudRadioGroup>
+                    </div>
+                    <div class="d-flex align-center justify-space-between mt-6">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                            @onclick="async()=>await RegVM.RegisterAsync()">Register</MudButton>
+                    </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+@code 
+{
+    
+}
