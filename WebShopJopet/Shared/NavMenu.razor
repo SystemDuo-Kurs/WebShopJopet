@@ -1,9 +1,29 @@
-﻿<MudNavMenu>
+﻿@using Microsoft.AspNetCore.Identity
+@inject NavigationManager NM
+<MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
-    <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup>
+    <AuthorizeView>
+        <NotAuthorized>
+            <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
+            <MudNavLink Href="/Identity/Account/Login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
+        </NotAuthorized>
+        <Authorized>
+            <form method="post" action="Identity/Account/LogOut">
+                <button type="submit">
+                    Logout
+                </button>
+            </form>
+            
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <MudNavGroup Title="ADMIN STUFF" Expanded="true">
+                <MudNavLink Href="/users"  Match="NavLinkMatch.Prefix">Users</MudNavLink>
+                <MudNavLink Href="/security"  Match="NavLinkMatch.Prefix">Security</MudNavLink>
+            </MudNavGroup>
+        </Authorized>
+    </AuthorizeView>
     <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
 </MudNavMenu>

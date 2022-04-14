@@ -6,12 +6,12 @@ namespace WebShopJopet.Services
     public class UserService
     {
         private UserManager<IdentityUser> UserManager { get; init; }
-        public UserService(UserManager<IdentityUser> userManager)
+        public UserService(UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager)
         {
             UserManager = userManager;
-
         }
-        public async Task RegisterUserAsync(UserReg user)
+        public async Task RegisterAsync(UserReg user)
         {
             IdentityUser iu;
             if (user.IsAdmin)
@@ -23,13 +23,13 @@ namespace WebShopJopet.Services
             }
             var result = await UserManager.CreateAsync(iu, user.Password);
             var u = await UserManager.FindByEmailAsync(user.Email);
-            //if (user.IsAdmin)
-           // {
-           //     await UserManager.AddToRoleAsync(u, "admin");
-           // } else
-           // {
-           //     await UserManager.AddToRoleAsync(u, "user");
-           // }
+            if (user.IsAdmin)
+            {
+                await UserManager.AddToRoleAsync(u, "admin");
+            } else
+            {
+                await UserManager.AddToRoleAsync(u, "user");
+            }
         }
     }
 }
