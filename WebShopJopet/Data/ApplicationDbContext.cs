@@ -8,9 +8,15 @@ namespace WebShopJopet.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
+        {}
+        protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+            builder.Entity<Article>().HasKey(a => a.Id);
+
         }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
+        public DbSet<Article> Articles { get; set; }
     }
 }

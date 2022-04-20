@@ -28,6 +28,9 @@ builder.Services.AddMudServices();
 builder.Services.AddTransient<UserMan>();
 builder.Services.AddTransient<UserService>();
 
+builder.Services.AddTransient<ArticleService>();
+builder.Services.AddTransient<ArticleList>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

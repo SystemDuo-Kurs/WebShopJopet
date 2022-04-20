@@ -1,0 +1,41 @@
+﻿@page "/adminArticles"
+@using Models
+@inject Viewmodels.ArticleList ArtLst
+@inject IDialogService Dialog
+<MudGrid>
+@foreach(Article art in ArtLst.Articles)
+{
+    <MudItem xs="3">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@art.Name</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" 
+                    @onclick="()=>OpenDialog(art)"/>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>@art.Description</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary">Read More</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+</MudGrid>
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await ArtLst.GetAllAsync();
+    }
+    public void OpenDialog(Article a)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("Article", a);
+        Dialog.Show<ArticleEdit>("Edit", parameters);
+    }
+}
