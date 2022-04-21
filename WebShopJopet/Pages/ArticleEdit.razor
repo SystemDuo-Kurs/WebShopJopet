@@ -1,8 +1,28 @@
 ﻿@using Models
-<h3>@Article.Name</h3>
-
+@using WebShopJopet.Viewmodels
+@inject IArticleEditVM ArtEd
+<MudPaper>
+    <MudForm Model=ArtEd.Article>
+        <MudTextField T="string" Label="Name" @bind-Value=ArtEd.Article.Name/>
+        <MudTextField T="string" Label="Desc" @bind-Value=ArtEd.Article.Description/>
+        <MudTextField T="decimal" Label="Price" @bind-Value=ArtEd.Article.Price/>
+        <MudTextField T="int" Label="Amount" @bind-Value=ArtEd.Article.Amount/>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" 
+            @onclick="async()=>{await ArtEd.SaveAsync();Refresh?.Invoke(); MudDialog.Close();}">Save</MudButton>
+    </MudForm>
+</MudPaper>
 @code 
 {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
     [Parameter]
-    public Article Article { get; set; }
+    public Article Article 
+    { 
+        get => ArtEd.Article; 
+        set => ArtEd.Article = value;
+    }
+
+    [Parameter]
+    public Func<Task> Refresh{ get; set; }
+
 }

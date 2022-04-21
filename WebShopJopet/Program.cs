@@ -25,11 +25,12 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddMudServices();
 
-builder.Services.AddTransient<UserMan>();
-builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<IUserMan, UserMan>();
+builder.Services.AddTransient<IUserService, UserService>();
 
-builder.Services.AddTransient<ArticleService>();
-builder.Services.AddTransient<ArticleList>();
+builder.Services.AddTransient<IArticleService, ArticleService>();
+builder.Services.AddTransient<IArticleList, ArticleList>();
+builder.Services.AddTransient<IArticleEditVM, ArticleEditVM>();
 
 var app = builder.Build();
 

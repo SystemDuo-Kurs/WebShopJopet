@@ -1,6 +1,6 @@
 ﻿@page "/adminArticles"
 @using Models
-@inject Viewmodels.ArticleList ArtLst
+@inject Viewmodels.IArticleList ArtLst
 @inject IDialogService Dialog
 <MudGrid>
 @foreach(Article art in ArtLst.Articles)
@@ -32,10 +32,12 @@
     {
         await ArtLst.GetAllAsync();
     }
-    public void OpenDialog(Article a)
+    public async Task OpenDialog(Article a)
     {
         var parameters = new DialogParameters();
         parameters.Add("Article", a);
+        parameters.Add("Refresh", async () => { await ArtLst.GetAllAsync(); StateHasChanged(); });
         Dialog.Show<ArticleEdit>("Edit", parameters);
+       
     }
 }

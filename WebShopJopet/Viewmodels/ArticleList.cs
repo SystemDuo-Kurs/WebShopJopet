@@ -3,11 +3,16 @@ using WebShopJopet.Services;
 
 namespace WebShopJopet.Viewmodels
 {
-    public class ArticleList
+    public interface IArticleList
+    {
+        Task GetAllAsync();
+        List<Article> Articles { get; }
+    }
+    public class ArticleList : IArticleList
     {
         public List<Article> Articles { get; private set; } = new();
-        private ArticleService ArticleService { get; init; }
-        public ArticleList(ArticleService articleService)
+        private IArticleService ArticleService { get; init; }
+        public ArticleList(IArticleService articleService)
         {
             ArticleService = articleService;
         }

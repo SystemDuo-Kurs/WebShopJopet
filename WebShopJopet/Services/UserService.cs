@@ -3,7 +3,11 @@ using WebShopJopet.Models;
 
 namespace WebShopJopet.Services
 {
-    public class UserService
+    public interface IUserService
+    {
+        Task RegisterAsync(UserReg user);
+    }
+    public class UserService : IUserService
     {
         private UserManager<IdentityUser> UserManager { get; init; }
         public UserService(UserManager<IdentityUser> userManager, 

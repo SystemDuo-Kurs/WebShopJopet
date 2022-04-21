@@ -5,12 +5,17 @@ using WebShopJopet.Services;
 
 namespace WebShopJopet.Viewmodels
 {
-    public class UserMan
+    public interface IUserMan
+    {
+        UserReg User { get; set; }
+        Task RegisterAsync();
+    }
+    public class UserMan : IUserMan
     {
         public UserReg User { get; set; } = new();
-        private UserService UserService { get; init; }
+        private IUserService UserService { get; init; }
         private NavigationManager NM { get; init; }
-        public UserMan(UserService userService, NavigationManager nm)
+        public UserMan(IUserService userService, NavigationManager nm)
         {
             UserService = userService;
             NM = nm;
