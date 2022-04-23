@@ -8,6 +8,7 @@ namespace WebShopJopet.Services
     {
         Task<List<Article>> GetAllAsync();
         Task SaveAsync(Article article);
+        Task DeleteAsync(List<Article> article);
     }
     public class ArticleService : IArticleService
     {
@@ -21,6 +22,11 @@ namespace WebShopJopet.Services
         public async Task SaveAsync(Article article)
         {
             Db.Update(article);
+            await Db.SaveChangesAsync();
+        }
+        public async Task DeleteAsync(List<Article> article)
+        {
+            article.ForEach(a => Db.Remove(a));
             await Db.SaveChangesAsync();
         }
     }

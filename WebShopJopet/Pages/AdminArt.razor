@@ -2,6 +2,23 @@
 @using Models
 @inject Viewmodels.IArticleList ArtLst
 @inject IDialogService Dialog
+<MudButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" 
+                    @onclick="()=>OpenDialog(new())">
+                    Dodaj
+</MudButton>
+
+<MudButton Icon="@Icons.Filled.FolderDelete" Color="Color.Default" 
+                    @onclick="()=> MutliDel = !MutliDel">
+                    Multikil
+</MudButton>
+@if (MutliDel)
+{
+    <MudButton Disabled=!ForDeletion.Any() Icon="@Icons.Filled.DeleteSweep" Color="Color.Default" 
+                    @onclick="async()=> await Delete()">
+        Brisi Sve
+    </MudButton>
+}
+
 <MudGrid>
 @foreach(Article art in ArtLst.Articles)
 {
@@ -13,7 +30,15 @@
                 </CardHeaderContent>
                 <CardHeaderActions>
                     <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" 
-                    @onclick="()=>OpenDialog(art)"/>
+                        @onclick="()=>OpenDialog(art)"/>
+                    <MudIconButton Icon="@Icons.Filled.DeleteForever" Color="Color.Default" 
+                        @onclick="async()=>{ForDeletion.Add(art);await Delete();}"/>
+                    @if(MutliDel)
+                    {
+                        <MudCheckBox TriState="false" T="bool" 
+                            CheckedChanged="(tst)=>ZaBrisanje(tst, art)"
+                            >Blaaa</MudCheckBox>
+                    }
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
@@ -28,6 +53,19 @@
 </MudGrid>
 @code 
 {
+    private bool _multiDel;
+    public bool MutliDel
+    { 
+        get => _multiDel; 
+        set
+        {
+            _multiDel = value;
+            if (!_multiDel)
+                ForDeletion.Clear();
+        }
+    }
+    private List<Article> ForDeletion { get; set; } = new();
+
     protected override async Task OnInitializedAsync()
     {
         await ArtLst.GetAllAsync();
@@ -38,6 +76,34 @@
         parameters.Add("Article", a);
         parameters.Add("Refresh", async () => { await ArtLst.GetAllAsync(); StateHasChanged(); });
         Dialog.Show<ArticleEdit>("Edit", parameters);
-       
+
+    }
+    private void ZaBrisanje(bool cek, Article a)
+    {
+        if (cek)
+            ForDeletion.Add(a);
+        else
+            ForDeletion.Remove(a);
+    }
+    public async Task Delete ()
+    {
+        MessageBoxOptions o = new();
+        o.CancelText = "Joook";
+        o.YesText = "Dap";
+        o.Title = "???";
+        if (ForDeletion.Count > 1)
+            o.Message = $"Brises GOMILU artikal ({ForDeletion.Count}) rly????";
+        else
+            o.Message = $"Brises artikal {ForDeletion.First().Name} rly????";
+
+        bool? result = await Dialog.ShowMessageBox(o);
+        if (result.HasValue && result.Value)
+        {
+            await ArtLst.DeleteAsync(ForDeletion);
+            await ArtLst.GetAllAsync();
+            ForDeletion = new();
+            StateHasChanged();
+        }
+
     }
 }

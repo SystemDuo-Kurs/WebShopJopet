@@ -6,6 +6,7 @@ namespace WebShopJopet.Viewmodels
     public interface IArticleList
     {
         Task GetAllAsync();
+        Task DeleteAsync(List<Article> article);
         List<Article> Articles { get; }
     }
     public class ArticleList : IArticleList
@@ -19,6 +20,10 @@ namespace WebShopJopet.Viewmodels
         public async Task GetAllAsync()
         {
             Articles = await ArticleService.GetAllAsync();
+        }
+        public async Task DeleteAsync(List<Article> article)
+        {
+            await ArticleService.DeleteAsync(article);
         }
     }
 }
