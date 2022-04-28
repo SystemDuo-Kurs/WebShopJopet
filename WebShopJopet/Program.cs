@@ -33,6 +33,8 @@ builder.Services.AddTransient<IArticleService, ArticleService>();
 builder.Services.AddTransient<IArticleList, ArticleList>();
 builder.Services.AddTransient<IArticleEditVM, ArticleEditVM>();
 
+builder.Services.AddTransient<IShopping, Shopping>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

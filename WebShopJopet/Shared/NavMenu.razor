@@ -17,6 +17,14 @@
         </Authorized>
     </AuthorizeView>
 
+    <AuthorizeView Roles="User">
+        <Authorized>
+            <MudNavGroup Title="ADMIN STUFF" Expanded="true">
+                <MudNavLink Href="/userArticles"   Match="NavLinkMatch.Prefix">Users</MudNavLink>
+                <MudNavLink Href="/basket" Icon="@Icons.Filled.ShoppingCart" Match="NavLinkMatch.Prefix">Articles</MudNavLink>
+            </MudNavGroup>
+        </Authorized>
+    </AuthorizeView>
     <AuthorizeView Roles="Admin">
         <Authorized>
             <MudNavGroup Title="ADMIN STUFF" Expanded="true">

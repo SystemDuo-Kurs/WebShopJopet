@@ -1,0 +1,53 @@
+﻿@page "/userArticles"
+@using Models
+@inject Viewmodels.IShopping Shopping
+@inject IDialogService Dialog
+
+<MudGrid>
+@foreach(ArticleOrder art in Shopping.Articles)
+{
+    <MudItem xs="3">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@art.Article.Name</MudText>
+                </CardHeaderContent>
+
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText>@art.Article.Description</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Filled.AddShoppingCart" Color="Color.Default" 
+                    @onclick="()=>PlaceInCart(art)"/>
+                <MudInput T="int" @bind-Value="art.Amount"/>
+                <MudIconButton Icon="@Icons.Filled.Add" OnClick="()=>Add(art)"/>
+                <MudIconButton Icon="@Icons.Filled.Remove" OnClick="()=>Remove(art)"/>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+</MudGrid>
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await Shopping.GetAllAsync();
+        await Shopping.GetCurrentOrder();
+    }
+    public async Task PlaceInCart(ArticleOrder a)
+    {
+        await Shopping.AddToCartAsync(a);
+    }
+
+    public void Add(ArticleOrder article)
+    {
+        if (article.Amount <= article.Article.Amount)
+            article.Amount++;
+    }
+    public void Remove(ArticleOrder article)
+    {
+        if (article.Amount > 1)
+            article.Amount--;
+    }
+}
