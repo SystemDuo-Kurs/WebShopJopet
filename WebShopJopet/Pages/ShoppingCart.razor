@@ -1,0 +1,44 @@
+﻿@page "/basket"
+@using Viewmodels
+@using Models
+@inject IShopping Shopping
+@if(Shopping.CurrentOrder.Articles.Any())
+{
+<MudTable T=ArticleOrder Items="Shopping.CurrentOrder.Articles" Loading="Loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Article</MudTh>
+        <MudTh>Quantity</MudTh>
+        <MudTh>Price</MudTh>
+        <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.ShoppingCart"
+            @onclick="async() => await Shopping.CheckoutAsync()"/>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Article.Name</MudTd>
+        <MudTd><MudNumericField Immediate=true Pattern=[0-9] Value=context.Amount Label="Standard" Variant="Variant.Text" Min=1 
+            Max=context.Article.Amount+1 ValueChanged="async(int amount)=>
+            {
+                context.Amount = amount;
+                await Shopping.SaveChangesAsync();
+            }"/></MudTd>
+        <MudTd>@(context.Article.Price * context.Amount)</MudTd>
+        <MudTd><MudIconButton Icon="@Icons.Filled.DeleteForever" Color="Color.Default" 
+                       @onclick="async()=>await Shopping.DeleteArticleFromOrderAsync(context)" /></MudTd>
+    </RowTemplate>
+    <FooterContent>
+        <b>@Shopping.CurrentOrder.TotalPrice</b>
+    </FooterContent>
+</MudTable>
+}else
+{
+    <b>Brt kupi nesto</b>
+}
+@code 
+{
+    private bool Loading{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await Shopping.GetCurrentOrderAsync();
+        Loading = false;
+        StateHasChanged();
+    }
+}

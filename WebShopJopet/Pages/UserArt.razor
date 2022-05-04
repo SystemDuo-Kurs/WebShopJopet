@@ -33,7 +33,7 @@
     protected override async Task OnInitializedAsync()
     {
         await Shopping.GetAllAsync();
-        await Shopping.GetCurrentOrder();
+        await Shopping.GetCurrentOrderAsync();
     }
     public async Task PlaceInCart(ArticleOrder a)
     {

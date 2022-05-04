@@ -9,10 +9,13 @@ namespace WebShopJopet.Viewmodels
         Order CurrentOrder { get; }
         Task GetAllAsync();
         Task AddToCartAsync(ArticleOrder art);
-        Task GetCurrentOrder();
+        Task GetCurrentOrderAsync();
+        Task SaveChangesAsync();
+        Task DeleteArticleFromOrderAsync(ArticleOrder article);
+        Task CheckoutAsync();
     }
     public class Shopping : IShopping
-    {
+    {    //TODO refactor, split into multiple vms
         public List<ArticleOrder> Articles { get; private set; } = new();
         public Order CurrentOrder { get; private set; } = new();
         private IOrderService OrderService { init; get; }
@@ -27,7 +30,7 @@ namespace WebShopJopet.Viewmodels
 
             
         }
-        public async Task GetCurrentOrder()
+        public async Task GetCurrentOrderAsync()
         {
             var result = await ProtectedLocalStorage.GetAsync<Order>("currentOrder");
             if (result.Success)
@@ -40,18 +43,30 @@ namespace WebShopJopet.Viewmodels
         
         public async Task AddToCartAsync(ArticleOrder art)
         {
-            var old = CurrentOrder.Articles.Find(ao => ao.Article == art.Article);
+            var old = CurrentOrder.Articles.Find(ao => ao.Article.Name == art.Article.Name);
             if (old is null)
-            {
                 CurrentOrder.Articles.Add(art);
-                var index = Articles.FindIndex(ao => ao.Article == art.Article);
-                Articles[index] = new ArticleOrder { Article = art.Article, Amount = 1 };
-            }
             else
                 old.Amount = art.Amount;
-            await ProtectedLocalStorage.SetAsync("currentOrder", CurrentOrder);
+            var index = Articles.FindIndex(ao => ao.Article.Name == art.Article.Name);
+            Articles[index] = new ArticleOrder { Article = art.Article, Amount = 1 };
+            await SaveChangesAsync();
         }
-        
+        public async Task DeleteArticleFromOrderAsync(ArticleOrder article)
+        {
+            CurrentOrder.Articles.Remove(article);
+            await SaveChangesAsync();
+        }
 
+        public async Task SaveChangesAsync()
+            => await ProtectedLocalStorage.SetAsync("currentOrder", CurrentOrder);
+
+        public async Task CheckoutAsync()
+        {
+            CurrentOrder.OrderState = OrderState.Waiting;
+            await OrderService.UpdateAsync(CurrentOrder);
+            CurrentOrder = new();
+            await ProtectedLocalStorage.DeleteAsync("currentOrder");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using WebShopJopet.Viewmodels;
 
 namespace WebShopJopet.Models
 {

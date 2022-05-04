@@ -10,13 +10,21 @@
         public decimal TotalWithFor()
         {
             decimal total = 0;
-            foreach(var artOr in Articles)
+            foreach (var artOr in Articles)
             {
                 total += artOr.Amount * artOr.Article.Price;
             }
             return total;
         }
         public DateTime OrderDate { get; set; }
+        public OrderState OrderState { get; set; }
 
+    }
+    public enum OrderState
+    {
+        Waiting,
+        Processing,
+        Done,
+        Refused
     }
 }
