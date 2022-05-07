@@ -21,6 +21,9 @@ namespace WebShopJopet.Data
             builder.Entity<Buyer>().HasMany(b => b.Orders)
                 .WithOne();
             builder.Entity<Buyer>().HasOne(b => b.CurrentOrder);
+            builder.Entity<Buyer>().HasMany(b => b.Addresses)
+                .WithOne();
+            builder.Entity<Address>().HasKey(a => a.Id);
 
             builder.Entity<ArticleOrder>().HasKey(ao => ao.Id);
             builder.Entity<ArticleOrder>().HasOne(ao => ao.Article);
@@ -28,6 +31,7 @@ namespace WebShopJopet.Data
         }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ArticleOrder> ArticleOrders { get; set; }

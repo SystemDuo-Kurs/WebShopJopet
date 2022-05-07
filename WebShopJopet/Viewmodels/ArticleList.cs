@@ -1,4 +1,5 @@
-﻿using WebShopJopet.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using WebShopJopet.Models;
 using WebShopJopet.Services;
 
 namespace WebShopJopet.Viewmodels

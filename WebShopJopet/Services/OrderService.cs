@@ -19,6 +19,17 @@ namespace WebShopJopet.Services
         }
         public async Task UpdateAsync(Order order)
         {
+            order.Articles.ForEach(articleOrder => articleOrder.Article =
+                Db.Find<Article>(articleOrder.Article.Id));
+            switch(order.OrderState)
+            {
+                case OrderState.Waiting:
+                    order.Articles.ForEach(articleOrder => articleOrder.Article.Amount -= articleOrder.Amount);
+                    break;
+                case OrderState.Refused:
+                    order.Articles.ForEach(articleOrder => articleOrder.Article.Amount += articleOrder.Amount);
+                    break;
+            }
             Db.Update(order);
             await Db.SaveChangesAsync();
         }

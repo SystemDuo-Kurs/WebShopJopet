@@ -6,7 +6,11 @@
 <MudGrid>
 @foreach(ArticleOrder art in Shopping.Articles)
 {
-    <MudItem xs="3">
+    /*@if(art.Article.Amount == 0)
+    {
+        continue;
+    }*/
+        <MudItem xs="3">
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
@@ -18,7 +22,8 @@
                 <MudText>@art.Article.Description</MudText>
             </MudCardContent>
             <MudCardActions>
-                <MudIconButton Icon="@Icons.Filled.AddShoppingCart" Color="Color.Default" 
+                
+                <MudIconButton Disabled="art.Article.Amount==0" Icon="@Icons.Filled.AddShoppingCart" Color="Color.Default" 
                     @onclick="()=>PlaceInCart(art)"/>
                 <MudInput T="int" @bind-Value="art.Amount"/>
                 <MudIconButton Icon="@Icons.Filled.Add" OnClick="()=>Add(art)"/>
@@ -42,7 +47,7 @@
 
     public void Add(ArticleOrder article)
     {
-        if (article.Amount <= article.Article.Amount)
+        if (article.Amount < article.Article.Amount)
             article.Amount++;
     }
     public void Remove(ArticleOrder article)

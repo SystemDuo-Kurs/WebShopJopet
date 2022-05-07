@@ -2,6 +2,9 @@
 @using Models
 @inject Viewmodels.IArticleList ArtLst
 @inject IDialogService Dialog
+@inject NavigationManager NavigationManager
+
+
 <MudButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" 
                     @onclick="()=>OpenDialog(new())">
                     Dodaj
@@ -51,8 +54,11 @@
     </MudItem>
 }
 </MudGrid>
+  
 @code 
 {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState{ get; set; }
     private bool _multiDel;
     public bool MutliDel
     { 
@@ -68,6 +74,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (!AuthenticationState.Result.User.Identity.IsAuthenticated)
+            NavigationManager.NavigateTo("/register");
+        else if (!AuthenticationState.Result.User.IsInRole("Admin"))
+            NavigationManager.NavigateTo("");
         await ArtLst.GetAllAsync();
     }
     public async Task OpenDialog(Article a)
@@ -76,7 +86,6 @@
         parameters.Add("Article", a);
         parameters.Add("Refresh", async () => { await ArtLst.GetAllAsync(); StateHasChanged(); });
         Dialog.Show<ArticleEdit>("Edit", parameters);
-
     }
     private void ZaBrisanje(bool cek, Article a)
     {

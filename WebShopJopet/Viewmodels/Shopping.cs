@@ -64,6 +64,7 @@ namespace WebShopJopet.Viewmodels
         public async Task CheckoutAsync()
         {
             CurrentOrder.OrderState = OrderState.Waiting;
+            CurrentOrder.OrderDate = DateTime.Now;
             await OrderService.UpdateAsync(CurrentOrder);
             CurrentOrder = new();
             await ProtectedLocalStorage.DeleteAsync("currentOrder");

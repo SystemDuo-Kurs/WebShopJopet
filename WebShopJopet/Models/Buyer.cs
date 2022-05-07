@@ -7,5 +7,6 @@ namespace WebShopJopet.Models
     {
         public Order CurrentOrder { get; set; } = new();
         public List<Order> Orders { get; set; } = new();
+        public List<Address> Addresses { get; set; } = new();
     }
 }
