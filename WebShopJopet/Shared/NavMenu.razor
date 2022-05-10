@@ -8,6 +8,7 @@
             <MudNavLink Href="/Identity/Account/Login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
         </NotAuthorized>
         <Authorized>
+            <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
             <form method="post" action="Identity/Account/LogOut">
                 <button type="submit">
                     Logout

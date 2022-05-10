@@ -1,0 +1,43 @@
+﻿@page "/profile"
+@using Viewmodels
+@using Models
+@inject IAddressList AddressList
+@inject IAddressEdit AddressEdit
+
+    <MudTable Items="AddressList.Addresses">
+        <HeaderContent>
+            <MudTh>Name</MudTh>
+            <MudTh>PO box</MudTh>
+            <MudTh>City</MudTh>
+            <MudTh>Street name</MudTh>
+            <MudTh>Street number</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.PO</MudTd>
+            <MudTd>@context.City</MudTd>
+            <MudTd>@context.StreetName</MudTd>
+            <MudTd>@context.StreetNumber</MudTd>
+        </RowTemplate>
+    </MudTable>
+    <MudForm Model=AddressEdit.Address>
+        <MudTextField T="string" @bind-Value=AddressEdit.Address.Name Label="Name"/>
+        <MudTextField T="string" @bind-Value=AddressEdit.Address.PO Label="PO"/>
+        <MudTextField T="string" @bind-Value=AddressEdit.Address.City Label="City"/>
+        <MudTextField T="string" @bind-Value=AddressEdit.Address.StreetName Label="Street name"/>
+        <MudTextField T="string" @bind-Value=AddressEdit.Address.StreetNumber Label="Street number"/>
+        <MudButton Variant="Variant.Filled" 
+        Color="Color.Primary" Class="ml-auto"
+        @onclick="async()=>{await AddressEdit.SaveAsync(AuthenticationState.Result.User.Identity.Name); 
+        await AddressList.GetAllAsync(AuthenticationState.Result.User.Identity.Name);}">Save</MudButton>
+    </MudForm>
+
+@code 
+{
+     [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await AddressList.GetAllAsync(AuthenticationState.Result.User.Identity.Name);
+    }
+}

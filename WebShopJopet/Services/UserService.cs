@@ -6,6 +6,7 @@ namespace WebShopJopet.Services
     public interface IUserService
     {
         Task RegisterAsync(UserReg user);
+        Task<IdentityUser> GetUserByNameAsync(string username);
     }
     public class UserService : IUserService
     {
@@ -35,5 +36,7 @@ namespace WebShopJopet.Services
                 await UserManager.AddToRoleAsync(u, "user");
             }
         }
+        public async Task<IdentityUser> GetUserByNameAsync(string username)
+            => await UserManager.FindByNameAsync(username);
     }
 }

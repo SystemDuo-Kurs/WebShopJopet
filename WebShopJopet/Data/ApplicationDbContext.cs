@@ -17,7 +17,8 @@ namespace WebShopJopet.Data
 
             builder.Entity<Order>().HasKey(o => o.Id);
             builder.Entity<Order>().HasMany(o => o.Articles);
-
+            builder.Entity<Admin>().HasOne(a => a.Address)
+                .WithOne().HasForeignKey<Address>();
             builder.Entity<Buyer>().HasMany(b => b.Orders)
                 .WithOne();
             builder.Entity<Buyer>().HasOne(b => b.CurrentOrder);

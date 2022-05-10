@@ -11,11 +11,9 @@ using WebShopJopet.Services;
 using WebShopJopet.Viewmodels;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -34,6 +32,10 @@ builder.Services.AddTransient<IArticleList, ArticleList>();
 builder.Services.AddTransient<IArticleEditVM, ArticleEditVM>();
 
 builder.Services.AddTransient<IShopping, Shopping>();
+
+builder.Services.AddTransient<IAddressService, AddressService>();
+builder.Services.AddTransient<IAddressEdit, AddressEdit>();
+builder.Services.AddTransient<IAddressList, AddressList>();
 
 var app = builder.Build();
 
