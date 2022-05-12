@@ -6,7 +6,7 @@ namespace WebShopJopet.Viewmodels
     public interface IAddressEdit
     {
         Task SaveAsync(string username);
-        Address Address { get; }
+        Address Address { get; set; }
     }
     public class AddressEdit : IAddressEdit
     {

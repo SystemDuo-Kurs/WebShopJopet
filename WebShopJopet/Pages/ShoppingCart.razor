@@ -2,6 +2,7 @@
 @using Viewmodels
 @using Models
 @inject IShopping Shopping
+@inject IDialogService DialogService
 @if(Shopping.CurrentOrder.Articles.Any())
 {
 <MudTable T=ArticleOrder Items="Shopping.CurrentOrder.Articles" Loading="Loading" LoadingProgressColor="Color.Info">
@@ -10,7 +11,7 @@
         <MudTh>Quantity</MudTh>
         <MudTh>Price</MudTh>
         <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.ShoppingCart"
-            @onclick="async() => await Shopping.CheckoutAsync()"/>
+            @onclick='async() => DialogService.Show<Profile>("Shopping")'/>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Article.Name</MudTd>
@@ -34,6 +35,7 @@
 }
 @code 
 {
+        
     private bool Loading{ get; set; }
     protected override async Task OnInitializedAsync()
     {

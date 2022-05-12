@@ -22,12 +22,14 @@ namespace WebShopJopet.Services
         public async Task<List<Address>> GetAllAsync(string username)
         {
             var user = await UserService.GetUserByNameAsync(username);
-            Db.Addresses.ToList();
+            var asd = Db.Addresses.ToList();
             switch (user)
             {
                 case Admin admin:
                     return (new Address[] { admin.Address is null ? new Address() : admin.Address }).ToList();
                 case Buyer buyer:
+                    var nesto = Db.Buyers.Where(b => b.UserName == username).Include(b => b.Addresses)
+                        .First();
                     return buyer.Addresses;
             }
             return new List<Address>();

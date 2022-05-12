@@ -1,0 +1,31 @@
+﻿@using Viewmodels
+@using Models
+@inject IAddressEdit AddressEdit
+
+<MudForm Model=AddressEdit.Address>
+    <MudTextField T="string" @bind-Value=AddressEdit.Address.Name Label="Name"/>
+    <MudTextField T="string" @bind-Value=AddressEdit.Address.PO Label="PO"/>
+    <MudTextField T="string" @bind-Value=AddressEdit.Address.City Label="City"/>
+    <MudTextField T="string" @bind-Value=AddressEdit.Address.StreetName Label="Street name"/>
+    <MudTextField T="string" @bind-Value=AddressEdit.Address.StreetNumber Label="Street number"/>
+    <MudButton Variant="Variant.Filled" 
+        Color="Color.Primary" Class="ml-auto"
+        @onclick="async()=>
+        {
+            await AddressEdit.SaveAsync(AuthenticationState.Result.User.Identity.Name);
+            AskForRefresh?.Invoke();
+        }">Save</MudButton>
+</MudForm>
+
+@code 
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState{ get; set; }
+    [Parameter]
+    public Action AskForRefresh { get; set; }
+    public void GetAddress(Address address)
+    {
+        AddressEdit.Address = address;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,11 @@
+﻿<h3>@NestoTamo</h3>
+<MudButton Color=Color.Error @onclick='()=>RadiNestoKodRoditelja?.Invoke("asdasdasd")'>Dugmeeee</MudButton>
+
+@code 
+{
+    [Parameter]
+    public string NestoTamo { get; set; } = string.Empty;
+    [Parameter]
+    public Action<string> RadiNestoKodRoditelja { get; set; }
+
+}

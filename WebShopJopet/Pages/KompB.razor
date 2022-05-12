@@ -1,0 +1,11 @@
+﻿<h3>@Podatak</h3>
+
+@code 
+{
+    private string Podatak { get; set; } = string.Empty;
+    public void Ulaz(string podatak)
+    {
+        Podatak = podatak;
+        StateHasChanged();
+    }
+}

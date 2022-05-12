@@ -1,0 +1,46 @@
+﻿@using Viewmodels
+@using Models
+@inject IAddressList AddressLst 
+<MudTable Items="AddressLst.Addresses">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>PO box</MudTh>
+        <MudTh>City</MudTh>
+        <MudTh>Street name</MudTh>
+        <MudTh>Street number</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.PO</MudTd>
+        <MudTd>@context.City</MudTd>
+        <MudTd>@context.StreetName</MudTd>
+        <MudTd>@context.StreetNumber</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Custom.Uncategorized.Radioactive" Color="Color.Dark"
+                @onclick="()=> AddressSend?.Invoke(context)"
+            />
+        </MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Custom.Uncategorized.Radioactive" Color="Color.Error"
+                @onclick="async()=>{ await AddressLst.DeleteAsync(context); 
+                       await AddressLst.GetAllAsync(AuthenticationState.Result.User.Identity.Name);}">
+            </MudIconButton>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+@code 
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState{ get; set; }
+    [Parameter]
+    public Action<Address> AddressSend{ get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+    public async Task Refresh()
+    {
+        await AddressLst.GetAllAsync(AuthenticationState.Result.User.Identity.Name);
+        StateHasChanged();
+    }
+}

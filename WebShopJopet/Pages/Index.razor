@@ -1,10 +1,11 @@
 ﻿@page "/"
 @using WebShopJopet.Models
-<form method="post" action="Identity/Account/TestTest">
-    <button type="submit" class="nestoTamo">asdasd</button>
-</form>
+
+<KompA NestoTamo="ASDaasd" RadiNestoKodRoditelja=Foo/>
+<KompB @ref=Komponenta/>
 
 @code
 {
-   
+    private KompB Komponenta{ get; set; }
+    public void Foo(string odDeteta) => Komponenta.Ulaz(odDeteta);
 }
