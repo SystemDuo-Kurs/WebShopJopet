@@ -1,0 +1,52 @@
+﻿@using Viewmodels
+@using Models
+@inject IAddressList AddressList
+
+@if (!_editing && AddressList.Addresses.Any())
+{
+    <MudIconButton Icon="@Icons.Material.Filled.AddCircle" @onclick="()=>_editing=!_editing"/>
+    <MudSelect T=Address SelectedValues="SelectedAddress" SelectedValuesChanged="(adrese)=>{SelectedAddress = adrese.ToList(); StateHasChanged();}" >
+        @foreach(var address in AddressList.Addresses)
+        {
+            <MudSelectItem Value=address>@address.Name</MudSelectItem>
+        }
+    </MudSelect>
+    @if(SelectedAddress.Any())
+    {
+        var address = SelectedAddress.First();
+        <MudText Typo="Typo.subtitle1" Class="mr-2">PO: @address.PO </MudText>
+        <MudText Typo="Typo.subtitle1" Class="mr-2">City: @address.City </MudText>
+        <MudText Typo="Typo.subtitle1" Class="mr-2">Street: @address.StreetName </MudText>
+        <MudText Typo="Typo.subtitle1" Class="mr-2">Number: @address.StreetNumber </MudText>
+    }
+}else
+{
+    <MudIconButton Icon="@Icons.Material.Filled.Api" @onclick="()=>_editing=!_editing"/>
+    <AddressEditor AskForRefresh="async()=>
+        {
+            await AddressList.GetAllAsync(AuthenticationState.Result.User.Identity.Name);
+            SetSelected();
+            _editing = false;
+            StateHasChanged();
+        }"/>
+}
+
+@code 
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState{ get; set; }
+    List<Address> SelectedAddress { get; set; } = new();
+    private bool _editing;
+    protected override async Task OnInitializedAsync()
+    {
+        await AddressList.GetAllAsync(AuthenticationState.Result.User.Identity.Name);
+        SetSelected();
+    }
+
+    private void SetSelected()
+    {
+        if (AddressList.Addresses.Any())
+            SelectedAddress.Add(AddressList.Addresses.First());
+    }
+ 
+}

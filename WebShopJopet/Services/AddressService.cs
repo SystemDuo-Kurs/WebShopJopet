@@ -43,7 +43,8 @@ namespace WebShopJopet.Services
                     admin.Address = address;
                     break;
                 case Buyer buyer:
-                    buyer.Addresses.Add(address);
+                    if (buyer.Addresses.Find(a=> a.Id == address.Id) is null)
+                        buyer.Addresses.Add(address);
                     break;
             }
             Db.Update(address);

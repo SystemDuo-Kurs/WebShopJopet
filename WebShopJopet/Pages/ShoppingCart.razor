@@ -11,7 +11,7 @@
         <MudTh>Quantity</MudTh>
         <MudTh>Price</MudTh>
         <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.ShoppingCart"
-            @onclick='async() => DialogService.Show<Profile>("Shopping")'/>
+            @onclick='async() => DialogService.Show<Ordering>("Shopping")'/>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Article.Name</MudTd>
